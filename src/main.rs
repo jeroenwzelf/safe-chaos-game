@@ -27,7 +27,15 @@ struct Point {
 }
 
 impl Point {
-    pub fn random(width: u32, height: u32, color: Color) -> Self {
+    pub fn random_vertex() -> Self {
+        return Self::random(10, 10, Color::GREEN);
+    }
+
+    pub fn random_tracer() -> Self {
+        return Self::random(1, 1, Color::WHITE);
+    }
+
+    fn random(width: u32, height: u32, color: Color) -> Self {
         return Self {
             x: rand::thread_rng().gen_range(0..SCREEN_WIDTH),
             y: rand::thread_rng().gen_range(0..SCREEN_HEIGHT),
@@ -59,7 +67,7 @@ impl Game for ChaosGame {
     fn load(_window: &Window) -> Task<ChaosGame> {
         const DEFAULT_VERTICES: u32 = 3;
         Task::succeed(|| ChaosGame {
-            vertices: (0..DEFAULT_VERTICES).map(|_| Point::random(10, 10, Color::GREEN)).collect(),
+            vertices: (0..DEFAULT_VERTICES).map(|_| Point::random_vertex()).collect(),
             tracer_history: Vec::new(),
         })
     }
@@ -71,7 +79,7 @@ impl Game for ChaosGame {
             vertex.draw(frame);
         }
 
-        self.tracer_history.push(Point::random(1, 1, Color::WHITE));
+        self.tracer_history.push(Point::random_tracer());
         for point in self.tracer_history.iter() {
             point.draw(frame);
         }
