@@ -49,6 +49,7 @@ impl Default for Point {
 struct ChaosGame {
     vertices: Vec<Point>,
     tracer_history: Vec<Point>,
+    initial_frame_drawn: bool,
 }
 
 impl Game for ChaosGame {
@@ -59,6 +60,7 @@ impl Game for ChaosGame {
         Task::succeed(|| ChaosGame {
             vertices: (0..DEFAULT_VERTICES).map(|_| Point { width: 10.0, height: 10.0, color: Color::GREEN, ..Default::default() }).collect(),
             tracer_history: vec![Default::default()],
+            initial_frame_drawn: false,
         })
     }
 
@@ -76,13 +78,17 @@ impl Game for ChaosGame {
     }
 
     fn draw(&mut self, frame: &mut Frame, _timer: &Timer) {
-        frame.clear(Color::BLACK);
+        if !self.initial_frame_drawn {
+            frame.clear(Color::BLACK);
 
-        for vertex in self.vertices.iter() {
-            vertex.draw(frame);
+            for vertex in self.vertices.iter() {
+                vertex.draw(frame);
+            }
+
+            self.initial_frame_drawn = true;
         }
 
-        for point in self.tracer_history.iter() {
+        if let Some(point) = self.tracer_history.last() {
             point.draw(frame);
         }
     }
