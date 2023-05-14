@@ -28,14 +28,6 @@ struct Point {
 }
 
 impl Point {
-    fn random(width: u32, height: u32, color: Color) -> Self {
-        return Self {
-            x: rand::thread_rng().gen_range(0..SCREEN_WIDTH),
-            y: rand::thread_rng().gen_range(0..SCREEN_HEIGHT),
-            width, height, color
-        };
-    }
-
     pub fn draw(&self, frame: &mut Frame) {
         let mut mesh = Mesh::new();
         mesh.fill(Shape::Rectangle(Rectangle {
@@ -50,7 +42,11 @@ impl Point {
 
 impl Default for Point {
     fn default() -> Self {
-        return Self::random(1, 1, Color::WHITE);
+        return Self {
+            x: rand::thread_rng().gen_range(0..SCREEN_WIDTH),
+            y: rand::thread_rng().gen_range(0..SCREEN_HEIGHT),
+            width: 1, height: 1, color: Color::WHITE,
+        };
     }
 }
 
