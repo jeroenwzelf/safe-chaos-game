@@ -19,7 +19,6 @@ fn main() -> Result<()> {
     })
 }
 
-#[derive(Clone)]
 struct Point {
     pub x: u32,
     pub y: u32,
