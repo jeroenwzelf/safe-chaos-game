@@ -71,22 +71,7 @@ impl Game for ChaosGame {
         })
     }
 
-    fn draw(&mut self, frame: &mut Frame, _timer: &Timer) {
-        frame.clear(Color::BLACK);
-
-        for vertex in self.vertices.iter() {
-            vertex.draw(frame);
-        }
-
-        self.tracer_update();
-        for point in self.tracer_history.iter() {
-            point.draw(frame);
-        }
-    }
-}
-
-impl ChaosGame {
-    fn tracer_update(&mut self) {
+    fn update(&mut self, _window: &Window) {
         let origin = self.tracer_history.last()
             .expect("At least one vertex should be defined!");
         let target = self.vertices.choose(&mut rand::thread_rng())
@@ -97,5 +82,17 @@ impl ChaosGame {
             y: (origin.y + target.y) / 2,
             ..Default::default()
         });
+    }
+
+    fn draw(&mut self, frame: &mut Frame, _timer: &Timer) {
+        frame.clear(Color::BLACK);
+
+        for vertex in self.vertices.iter() {
+            vertex.draw(frame);
+        }
+
+        for point in self.tracer_history.iter() {
+            point.draw(frame);
+        }
     }
 }
