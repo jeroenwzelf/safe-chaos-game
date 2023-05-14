@@ -93,14 +93,14 @@ impl Game for ChaosGame {
 
 impl ChaosGame {
     fn tracer_update(&mut self) {
-        let origin = self.tracer_history.last().expect("At least one vertex should be defined!");
-        let target = self.vertices.choose(&mut rand::thread_rng()).expect("No random vertex could be selected from the vertices list.");
+        let origin = self.tracer_history.last()
+            .expect("At least one vertex should be defined!");
+        let target = self.vertices.choose(&mut rand::thread_rng())
+            .expect("No random vertex could be selected from the vertices list.");
 
-        let new_tracer = Point::tracer_at(
+        self.tracer_history.push(Point::tracer_at(
             (origin.x + target.x) / 2,
             (origin.y + target.y) / 2,
-        );
-
-        self.tracer_history.push(new_tracer);
+        ));
     }
 }
