@@ -6,13 +6,13 @@ use coffee::load::Task;
 use coffee::{Game, Result, Timer};
 
 const DEFAULT_VERTICES: u32 = 3;
-const SCREEN_WIDTH: u32 = 800;
-const SCREEN_HEIGHT: u32 = 800;
+const SCREEN_WIDTH: f32 = 800.0;
+const SCREEN_HEIGHT: f32 = 800.0;
 
 fn main() -> Result<()> {
     ChaosGame::run(WindowSettings {
         title: String::from("Chaos Game"),
-        size: (SCREEN_WIDTH, SCREEN_HEIGHT),
+        size: (SCREEN_WIDTH as u32, SCREEN_HEIGHT as u32),
         resizable: false,
         fullscreen: false,
         maximized: false,
@@ -20,10 +20,10 @@ fn main() -> Result<()> {
 }
 
 struct Point {
-    pub x: u32,
-    pub y: u32,
-    pub width: u32,
-    pub height: u32,
+    pub x: f32,
+    pub y: f32,
+    pub width: f32,
+    pub height: f32,
     pub color: Color,
 }
 
@@ -31,10 +31,10 @@ impl Point {
     pub fn draw(&self, frame: &mut Frame) {
         let mut mesh = Mesh::new();
         mesh.fill(Shape::Rectangle(Rectangle {
-            x: self.x as f32,
-            y: self.y as f32,
-            width: self.width as f32,
-            height: self.height as f32,
+            x: self.x,
+            y: self.y,
+            width: self.width,
+            height: self.height,
         }), self.color);
         mesh.draw(&mut frame.as_target());
     }
@@ -43,9 +43,9 @@ impl Point {
 impl Default for Point {
     fn default() -> Self {
         return Self {
-            x: rand::thread_rng().gen_range(0..SCREEN_WIDTH),
-            y: rand::thread_rng().gen_range(0..SCREEN_HEIGHT),
-            width: 1, height: 1, color: Color::WHITE,
+            x: rand::thread_rng().gen_range(0.0..SCREEN_WIDTH),
+            y: rand::thread_rng().gen_range(0.0..SCREEN_HEIGHT),
+            width: 1.0, height: 1.0, color: Color::WHITE,
         };
     }
 }
@@ -61,7 +61,7 @@ impl Game for ChaosGame {
 
     fn load(_window: &Window) -> Task<ChaosGame> {
         Task::succeed(|| ChaosGame {
-            vertices: (0..DEFAULT_VERTICES).map(|_| Point { width: 10, height: 10, color: Color::GREEN, ..Default::default() }).collect(),
+            vertices: (0..DEFAULT_VERTICES).map(|_| Point { width: 10.0, height: 10.0, color: Color::GREEN, ..Default::default() }).collect(),
             tracer_history: vec![Default::default()],
         })
     }
@@ -73,8 +73,8 @@ impl Game for ChaosGame {
             .expect("No random vertex could be selected from the vertices list.");
 
         self.tracer_history.push(Point {
-            x: (origin.x + target.x) / 2,
-            y: (origin.y + target.y) / 2,
+            x: (origin.x + target.x) / 2.0,
+            y: (origin.y + target.y) / 2.0,
             ..Default::default()
         });
     }
