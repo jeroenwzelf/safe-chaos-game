@@ -181,6 +181,7 @@ name = "chaos_game"
 version = "0.1.0"
 dependencies = [
  "coffee",
+ "rand 0.8.5",
 ]
 
 [[package]]
