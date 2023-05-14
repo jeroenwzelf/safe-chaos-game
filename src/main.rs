@@ -5,6 +5,7 @@ use coffee::graphics::{Color, Frame, Mesh, Shape, Rectangle, Window, WindowSetti
 use coffee::load::Task;
 use coffee::{Game, Result, Timer};
 
+const DEFAULT_VERTICES: u32 = 3;
 const SCREEN_WIDTH: u32 = 800;
 const SCREEN_HEIGHT: u32 = 800;
 
@@ -64,7 +65,6 @@ impl Game for ChaosGame {
     type LoadingScreen = ();
 
     fn load(_window: &Window) -> Task<ChaosGame> {
-        const DEFAULT_VERTICES: u32 = 3;
         Task::succeed(|| ChaosGame {
             vertices: (0..DEFAULT_VERTICES).map(|_| Point { width: 10, height: 10, color: Color::GREEN, ..Default::default() }).collect(),
             tracer_history: vec![Default::default()],
