@@ -17,13 +17,13 @@ fn main() -> Result<()> {
     })
 }
 
-struct Point {
+struct Vertex {
     pub x: f32, pub y: f32,
     pub width: f32, pub height: f32,
     pub color: Color,
 }
 
-impl Point {
+impl Vertex {
     pub fn draw(&self, frame: &mut Frame) {
         let mut mesh = Mesh::new();
         mesh.fill(Shape::Rectangle(Rectangle {
@@ -36,7 +36,7 @@ impl Point {
     }
 }
 
-impl Default for Point {
+impl Default for Vertex {
     fn default() -> Self {
         Self {
             x: rand::thread_rng().gen_range(0.0..SCREEN_WIDTH),
@@ -47,8 +47,8 @@ impl Default for Point {
 }
 
 struct ChaosGame {
-    vertices: Vec<Point>,
-    tracer_history: Vec<Point>,
+    vertices: Vec<Vertex>,
+    tracer_history: Vec<Vertex>,
     initial_frame_drawn: bool,
 }
 
@@ -58,7 +58,7 @@ impl Game for ChaosGame {
 
     fn load(_window: &Window) -> Task<ChaosGame> {
         Task::succeed(|| ChaosGame {
-            vertices: (0..DEFAULT_VERTICES).map(|_| Point { width: 10.0, height: 10.0, color: Color::GREEN, ..Default::default() }).collect(),
+            vertices: (0..DEFAULT_VERTICES).map(|_| Vertex { width: 10.0, height: 10.0, color: Color::GREEN, ..Default::default() }).collect(),
             tracer_history: vec![Default::default()],
             initial_frame_drawn: false,
         })
@@ -70,7 +70,7 @@ impl Game for ChaosGame {
         let target = self.vertices.choose(&mut rand::thread_rng())
             .expect("No random vertex could be selected from the vertices list.");
 
-        self.tracer_history.push(Point {
+        self.tracer_history.push(Vertex {
             x: (origin.x + target.x) / 2.0,
             y: (origin.y + target.y) / 2.0,
             ..Default::default()
@@ -88,8 +88,8 @@ impl Game for ChaosGame {
             self.initial_frame_drawn = true;
         }
 
-        if let Some(point) = self.tracer_history.last() {
-            point.draw(frame);
+        if let Some(tracer) = self.tracer_history.last() {
+            tracer.draw(frame);
         }
     }
 }
