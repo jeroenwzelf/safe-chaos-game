@@ -38,11 +38,11 @@ impl Point {
 
 impl Default for Point {
     fn default() -> Self {
-        return Self {
+        Self {
             x: rand::thread_rng().gen_range(0.0..SCREEN_WIDTH),
             y: rand::thread_rng().gen_range(0.0..SCREEN_HEIGHT),
             width: 1.0, height: 1.0, color: Color::WHITE,
-        };
+        }
     }
 }
 
