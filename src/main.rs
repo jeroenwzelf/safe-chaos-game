@@ -39,13 +39,13 @@ impl Point {
 
     pub fn draw(&self, frame: &mut Frame) {
         let mut mesh = Mesh::new();
-            mesh.fill(Shape::Rectangle(Rectangle {
-                x: self.x as f32,
-                y: self.y as f32,
-                width: self.width as f32,
-                height: self.height as f32,
-            }), self.color);
-            mesh.draw(&mut frame.as_target());
+        mesh.fill(Shape::Rectangle(Rectangle {
+            x: self.x as f32,
+            y: self.y as f32,
+            width: self.width as f32,
+            height: self.height as f32,
+        }), self.color);
+        mesh.draw(&mut frame.as_target());
     }
 }
 
