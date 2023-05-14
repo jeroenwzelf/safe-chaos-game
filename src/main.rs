@@ -13,17 +13,13 @@ fn main() -> Result<()> {
     ChaosGame::run(WindowSettings {
         title: String::from("Chaos Game"),
         size: (SCREEN_WIDTH as u32, SCREEN_HEIGHT as u32),
-        resizable: false,
-        fullscreen: false,
-        maximized: false,
+        resizable: false, fullscreen: false, maximized: false,
     })
 }
 
 struct Point {
-    pub x: f32,
-    pub y: f32,
-    pub width: f32,
-    pub height: f32,
+    pub x: f32, pub y: f32,
+    pub width: f32, pub height: f32,
     pub color: Color,
 }
 
