@@ -17,16 +17,17 @@ fn main() -> Result<()> {
     })
 }
 
+#[derive(Clone)]
 struct Point {
     x: u32,
     y: u32,
-    width: u16,
-    height: u16,
+    width: u32,
+    height: u32,
     color: Color,
 }
 
 impl Point {
-    pub fn random(width: u16, height: u16, color: Color) -> Self {
+    pub fn random(width: u32, height: u32, color: Color) -> Self {
         return Self {
             x: rand::thread_rng().gen_range(0..SCREEN_WIDTH),
             y: rand::thread_rng().gen_range(0..SCREEN_HEIGHT),
@@ -47,7 +48,8 @@ impl Point {
 }
 
 struct ChaosGame {
-    points: Vec<Point>,
+    vertices: Vec<Point>,
+    tracer_history: Vec<Point>,
 }
 
 impl Game for ChaosGame {
@@ -55,15 +57,22 @@ impl Game for ChaosGame {
     type LoadingScreen = ();
 
     fn load(_window: &Window) -> Task<ChaosGame> {
+        const DEFAULT_VERTICES: u32 = 3;
         Task::succeed(|| ChaosGame {
-            points: Vec::new(),
+            vertices: (0..DEFAULT_VERTICES).map(|_| Point::random(10, 10, Color::GREEN)).collect(),
+            tracer_history: Vec::new(),
         })
     }
 
     fn draw(&mut self, frame: &mut Frame, _timer: &Timer) {
         frame.clear(Color::BLACK);
-        self.points.push(Point::random(1, 1, Color::WHITE));
-        for point in self.points.iter() {
+
+        for vertex in self.vertices.iter() {
+            vertex.draw(frame);
+        }
+
+        self.tracer_history.push(Point::random(1, 1, Color::WHITE));
+        for point in self.tracer_history.iter() {
             point.draw(frame);
         }
     }
