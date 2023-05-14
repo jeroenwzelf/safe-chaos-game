@@ -20,14 +20,29 @@ fn main() -> Result<()> {
 struct Point {
     x: u32,
     y: u32,
+    width: u16,
+    height: u16,
+    color: Color,
 }
 
 impl Point {
-    pub fn random() -> Self {
+    pub fn random(width: u16, height: u16, color: Color) -> Self {
         return Self {
             x: rand::thread_rng().gen_range(0..SCREEN_WIDTH),
             y: rand::thread_rng().gen_range(0..SCREEN_HEIGHT),
+            width, height, color
         };
+    }
+
+    pub fn draw(&self, frame: &mut Frame) {
+        let mut mesh = Mesh::new();
+            mesh.fill(Shape::Rectangle(Rectangle {
+                x: self.x as f32,
+                y: self.y as f32,
+                width: self.width as f32,
+                height: self.height as f32,
+            }), self.color);
+            mesh.draw(&mut frame.as_target());
     }
 }
 
@@ -47,16 +62,9 @@ impl Game for ChaosGame {
 
     fn draw(&mut self, frame: &mut Frame, _timer: &Timer) {
         frame.clear(Color::BLACK);
-        self.points.push(Point::random());
+        self.points.push(Point::random(1, 1, Color::WHITE));
         for point in self.points.iter() {
-            let mut mesh = Mesh::new();
-            mesh.fill(Shape::Rectangle(Rectangle {
-                x: point.x as f32,
-                y: point.y as f32,
-                width: 1.0,
-                height: 1.0,
-            }), Color::WHITE);
-            mesh.draw(&mut frame.as_target());
+            point.draw(frame);
         }
     }
 }
