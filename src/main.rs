@@ -48,7 +48,7 @@ impl Default for Vertex {
 
 struct ChaosGame {
     vertices: Vec<Vertex>,
-    tracer_history: Vec<Vertex>,
+    last_tracer: Vertex,
     initial_frame_drawn: bool,
 }
 
@@ -59,22 +59,21 @@ impl Game for ChaosGame {
     fn load(_window: &Window) -> Task<ChaosGame> {
         Task::succeed(|| ChaosGame {
             vertices: (0..DEFAULT_VERTICES).map(|_| Vertex { width: 10.0, height: 10.0, color: Color::GREEN, ..Default::default() }).collect(),
-            tracer_history: vec![Default::default()],
+            last_tracer: Default::default(),
             initial_frame_drawn: false,
         })
     }
 
     fn update(&mut self, _window: &Window) {
-        let origin = self.tracer_history.last()
-            .expect("At least one vertex should be defined!");
+        let origin = &self.last_tracer;
         let target = self.vertices.choose(&mut rand::thread_rng())
             .expect("No random vertex could be selected from the vertices list.");
 
-        self.tracer_history.push(Vertex {
+        self.last_tracer = Vertex {
             x: (origin.x + target.x) / 2.0,
             y: (origin.y + target.y) / 2.0,
             ..Default::default()
-        });
+        };
     }
 
     fn draw(&mut self, frame: &mut Frame, _timer: &Timer) {
@@ -88,8 +87,6 @@ impl Game for ChaosGame {
             self.initial_frame_drawn = true;
         }
 
-        if let Some(tracer) = self.tracer_history.last() {
-            tracer.draw(frame);
-        }
+        self.last_tracer.draw(frame);
     }
 }
