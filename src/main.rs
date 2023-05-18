@@ -18,13 +18,13 @@ fn main() -> Result<()> {
 }
 
 struct Vertex {
-    pub x: f32, pub y: f32,
-    pub width: f32, pub height: f32,
-    pub color: Color,
+    x: f32, y: f32,
+    width: f32, height: f32,
+    color: Color,
 }
 
 impl Vertex {
-    pub fn draw(&self, frame: &mut Frame) {
+    fn draw(&self, frame: &mut Frame) {
         let mut mesh = Mesh::new();
         mesh.fill(Shape::Rectangle(Rectangle {
             x: self.x,
